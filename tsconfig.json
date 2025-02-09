@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "strict": true,
+    "paths": {
+      "@/*": ["src/*"],
+      "@/libs/logger": ["libs/logger/src"],
+      "@/libs/logger/*": ["libs/logger/src/*"],
+      "@/libs/event-bus": ["libs/event-bus/src"],
+      "@/libs/event-bus/*": ["libs/event-bus/src/*"],
+      "@/libs/stripe": ["libs/stripe/src"],
+      "@/libs/stripe/*": ["libs/stripe/src/*"],
+      "@/libs/rabbitmq": ["libs/rabbitmq/src"],
+      "@/libs/rabbitmq/*": ["libs/rabbitmq/src/*"],
+      "@/test/*": ["test/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "libs/**/*.ts", "test/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}

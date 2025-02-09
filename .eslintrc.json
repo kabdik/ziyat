@@ -1,0 +1,227 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": ["./tsconfig.*?.json"],
+    "sourceType": "module"
+  },
+  "ignorePatterns": ["*.config.js", "jest.setup.ts", "jest.config.js"],
+  "plugins": ["@typescript-eslint", "jest"],
+  "extends": [
+    "airbnb-base",
+    "airbnb-typescript/base",
+    "plugin:jest/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "prettier"
+  ],
+  "rules": {
+    "class-methods-use-this": "off",
+    "max-classes-per-file": "off",
+    // https://github.com/typescript-eslint/typescript-eslint/issues/1277
+    "consistent-return": "off",
+    "max-len": [
+      "error",
+      {
+        "code": 100,
+        "ignoreTemplateLiterals": true,
+        "ignorePattern": "^import\\s.+\\sfrom\\s.+;$",
+        "ignoreComments": true
+      }
+    ],
+    "newline-per-chained-call": "off",
+    "no-await-in-loop": "off",
+    "no-continue": "off",
+    "new-cap": [
+      "error",
+      {
+        "properties": false,
+        "capIsNew": false
+      }
+    ],
+    // https://github.com/airbnb/javascript/blob/master/packages/eslint-config-airbnb-base/rules/style.js#L334-L352
+    "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"],
+    "no-void": [
+      "error",
+      {
+        "allowAsStatement": true
+      }
+    ],
+    "object-curly-newline": "off",
+    // https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/docs/rules/keyword-spacing.md
+    "keyword-spacing": "off",
+    "@typescript-eslint/keyword-spacing": ["error"],
+    // Change eslint rule to @typescript-eslint rule
+    "lines-between-class-members": [
+      "error",
+      "always",
+      {
+        "exceptAfterSingleLine": true
+      }
+    ],
+    "no-fallthrough": "off",
+    "no-dupe-class-members": "off",
+    "no-duplicate-imports": "off",
+    "no-loop-func": "off",
+    "no-return-await": "off",
+    "no-unused-expressions": "off",
+    "no-unused-vars": "warn",
+    "object-curly-spacing": "off",
+    // https://stackoverflow.com/a/72643821/13237426
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "": "never",
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ],
+    // https://github.com/benmosher/eslint-plugin-import/issues/1753
+    "import/named": "off",
+    // https://github.com/benmosher/eslint-plugin-import/issues/1453
+    "import/no-cycle": "off",
+    "import/no-duplicates": "error",
+    "import/no-default-export": "error",
+    "import/prefer-default-export": "off",
+    "import/order": [
+      "error",
+      {
+        "pathGroups": [
+          {
+            "pattern": "@/**",
+            "group": "external",
+            "position": "after"
+          }
+        ],
+        "groups": ["builtin", "external", "internal"],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": ["src/**"]
+      }
+    ],
+    "@typescript-eslint/consistent-indexed-object-style": "error",
+    "@typescript-eslint/consistent-type-assertions": [
+      "error",
+      {
+        "assertionStyle": "as"
+      }
+    ],
+    "@typescript-eslint/explicit-function-return-type": "off",
+    // https://github.com/typescript-eslint/typescript-eslint/issues/977
+    "@typescript-eslint/lines-between-class-members": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/member-delimiter-style": "error",
+    "@typescript-eslint/no-unsafe-return": "off",
+    "@typescript-eslint/no-unsafe-argument": "warn",
+    "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "default",
+        "format": ["strictCamelCase"]
+      },
+      {
+        "selector": "import",
+        "format": ["camelCase", "PascalCase"]
+      },
+      {
+        "selector": "variable",
+        "format": ["strictCamelCase", "UPPER_CASE", "StrictPascalCase"]
+      },
+      // https://github.com/microsoft/TypeScript/issues/9458
+      {
+        "selector": "parameter",
+        "modifiers": ["unused"],
+        "format": ["strictCamelCase"],
+        "leadingUnderscore": "allow"
+      },
+      {
+        "selector": "property",
+        "format": null
+      },
+      {
+        "selector": "typeProperty",
+        "format": null
+      },
+      {
+        "selector": "typeLike",
+        "format": ["PascalCase"]
+      },
+      {
+        "selector": "interface",
+        "format": ["PascalCase"]
+      },
+      {
+        "selector": "enumMember",
+        "format": ["UPPER_CASE"]
+      },
+      {
+        "selector": "classMethod",
+        "format": ["camelCase"]
+      }
+    ],
+    "@typescript-eslint/no-dupe-class-members": "error",
+    "@typescript-eslint/no-floating-promises": [
+      "error",
+      {
+        "ignoreIIFE": true,
+        "ignoreVoid": true
+      }
+    ],
+    "@typescript-eslint/no-inferrable-types": [
+      "error",
+      {
+        "ignoreParameters": true,
+        "ignoreProperties": true
+      }
+    ],
+    "@typescript-eslint/no-loop-func": "error",
+    "@typescript-eslint/no-misused-promises": [
+      "error",
+      {
+        "checksVoidReturn": false
+      }
+    ],
+    "@typescript-eslint/no-unnecessary-boolean-literal-compare": "error",
+    "@typescript-eslint/no-unnecessary-qualifier": "error",
+    "@typescript-eslint/no-unnecessary-type-arguments": "error",
+    "@typescript-eslint/no-unnecessary-type-assertion": "error",
+    "@typescript-eslint/no-unnecessary-type-constraint": "error",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
+    "@typescript-eslint/no-unused-expressions": "error",
+    "@typescript-eslint/no-redeclare": "off",
+    "@typescript-eslint/object-curly-spacing": ["error", "always"],
+    "@typescript-eslint/prefer-includes": "off",
+    "@typescript-eslint/prefer-optional-chain": "error",
+    "@typescript-eslint/promise-function-async": "error",
+    "@typescript-eslint/restrict-template-expressions": "off",
+    "@typescript-eslint/return-await": "error",
+    "@typescript-eslint/typedef": "off",
+    "@typescript-eslint/unbound-method": [
+      "error",
+      {
+        "ignoreStatic": true
+      }
+    ],
+    "@typescript-eslint/no-empty-interface": "off"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.spec.ts", "**/*.test.ts"],
+      "rules": {
+        "@typescript-eslint/unbound-method": "off"
+      }
+    }
+  ]
+}

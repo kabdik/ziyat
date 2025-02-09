@@ -1,0 +1,25 @@
+{
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "testRegex": ".e2e-spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "verbose": true,
+  "testTimeout": 15000,
+  "setupFilesAfterEnv": ["<rootDir>/../jest.setup.ts"],
+  "moduleNameMapper": {
+    "@/libs/logger/(.*)": "<rootDir>/../libs/logger/src/$1",
+    "@/libs/logger": "<rootDir>/../libs/logger/src",
+    "@/libs/event-bus/(.*)": "<rootDir>/../libs/event-bus/src/$1",
+    "@/libs/event-bus": "<rootDir>/../libs/event-bus/src",
+    "@/libs/demo/(.*)": "<rootDir>/../libs/demo/src/$1",
+    "@/libs/demo": "<rootDir>/../libs/demo/src",
+    "@/libs/stripe/(.*)": "<rootDir>/../libs/stripe/src/$1",
+    "@/libs/stripe": "<rootDir>/../libs/stripe/src",
+    "@/libs/rabbitmq/(.*)": "<rootDir>/../libs/rabbitmq/src/$1",
+    "@/libs/rabbitmq": "<rootDir>/../libs/rabbitmq/src",
+    "@/(.*)": "<rootDir>/../src/$1"
+  }
+}

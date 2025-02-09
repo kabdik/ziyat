@@ -1,0 +1,3 @@
+export const PRISMA_CODE_UNIQUE_KEY_VIOLATION = 'P2002';
+export const PRISMA_RECORD_NOT_FOUND = 'P2025';
+export const PRISMA_BAD_REQUEST = 'P2025';

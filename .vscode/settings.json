@@ -1,0 +1,22 @@
+{
+  "editor.formatOnSave": false,
+  "eslint.workingDirectories": [
+    {
+      "pattern": "./apps/*"
+    }
+  ],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // run eslint after prettier
+  "editor.codeActionsOnSave": ["source.fixAll.format", "source.fixAll.eslint"],
+  "[prisma]": {
+    "editor.defaultFormatter": null
+  },
+  "[terraform]": {
+    "editor.defaultFormatter": "hashicorp.terraform"
+  },
+  "[dockerfile]": {
+    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+  },
+  "prettier.configPath": ".prettierrc",
+  "cSpell.words": ["idempotency", "rabbitmq", "Updateable", "Savepoint"]
+}
