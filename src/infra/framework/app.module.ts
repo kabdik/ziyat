@@ -4,6 +4,7 @@ import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 
 import { LoggerModule } from '@/libs/logger';
 import { AuthModule } from '@/modules/auth/infra/framework/auth.module';
+import { UniversityModule } from '@/modules/university/infra/framework/university.module';
 import { UserModule } from '@/modules/user/infra/framework/user.module';
 
 
@@ -16,7 +17,8 @@ import { PrismaModule } from '../drivers/prisma/prisma.module';
     }),
     PrismaModule,
     UserModule,
-    AuthModule
+    AuthModule,
+    UniversityModule
   ],
   providers: [
     {

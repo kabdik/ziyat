@@ -1,8 +1,7 @@
 export type PaginatedQueryParams = {
-    limit: number;
-    page: number;
-    offset: number;
-    orderBy: OrderBy;
+    limit?: number;
+    page?: number;
+    orderBy?: OrderBy;
 };
 
 export type OrderBy = { field: string | true; param: 'asc' | 'desc' };

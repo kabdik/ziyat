@@ -24,3 +24,13 @@ model Role {
   id   Int    @id @default(autoincrement())
   name String
 }
+
+model University {
+  id          Int      @id @default(autoincrement())
+  name        String
+  country     String
+  description String
+  rating      Int
+  createdAt   DateTime @default(now())
+  modifiedAt  DateTime @updatedAt
+}
