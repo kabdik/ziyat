@@ -10,7 +10,7 @@ const APP_ENVS = Object.values(AppEnv);
 
 export class ServerConfig {
   public static readonly apiPrefix: string = get('SERVER_API_PREFIX')
-    .default('')
+    .default('api/v1')
     .asString();
 
   public static readonly port: number = get('SERVER_PORT')

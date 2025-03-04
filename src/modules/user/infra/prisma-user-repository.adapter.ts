@@ -5,8 +5,10 @@ import { Paginated, PaginatedQueryParams } from "@/core/domain/repository.interf
 import { PrismaService } from "@/infra/drivers/prisma/prisma.service";
 import { UserMapper } from "@/modules/auth/application/mappers/user.mapper";
 
-import { UserRepositoryPort } from "../../domain/user-repository.port";
-import { UserEntity } from "../../domain/user.entity";
+import { UserRepositoryPort } from "../domain/user-repository.port";
+import { UserEntity } from "../domain/user.entity";
+
+
 
 @Injectable()
 export class PrismaUserRepositoryAdapter

@@ -1,10 +1,12 @@
 import { Module } from "@nestjs/common";
 
 import { JwtModule } from "@/infra/drivers/jwt/jwt.module";
-import { UserModule } from "@/modules/user/infra/framework/user.module";
+import { UserModule } from "@/modules/user/infra/user.module";
 
-import { AUTH_USE_CASES } from "../../application/use-cases";
-import { AuthController } from "../../presentation/auth.conrtoller";
+import { AUTH_USE_CASES } from "../application/use-cases";
+import { AuthController } from "../presentation/auth.conrtoller";
+
+
 
 @Module({
     imports: [UserModule, JwtModule],

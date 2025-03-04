@@ -4,9 +4,10 @@ import { RepositoryBase } from "@/core/domain/repository.base";
 import { PaginatedQueryParams, Paginated } from "@/core/domain/repository.interface";
 import { PrismaService } from "@/infra/drivers/prisma/prisma.service";
 
-import { UniversityMapper } from "../../application/university.mapper";
-import { UniversityRepositoryPort } from "../../domain/university-repository.port";
-import { UniversityEntity } from "../../domain/university.entity";
+import { UniversityMapper } from "../application/university.mapper";
+import { UniversityRepositoryPort } from "../domain/university-repository.port";
+import { UniversityEntity } from "../domain/university.entity";
+
 
 @Injectable()
 export class PrismaUniversityRepositoryAdapter
