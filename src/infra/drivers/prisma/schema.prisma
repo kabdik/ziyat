@@ -31,6 +31,7 @@ model University {
   country     String
   description String
   rating      Int
+  websiteUrl  String?
   createdAt   DateTime @default(now())
   modifiedAt  DateTime @updatedAt
 }

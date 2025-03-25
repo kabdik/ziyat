@@ -10,14 +10,14 @@ interface Props extends PaginatedQueryParams {
 }
 
 @Injectable()
-export class GetAllUseCase implements UseCase<Props, any> {
+export class GetAllUseCase implements UseCase<Props, unknown> {
     constructor(
         @Inject(UniversityRepositoryPort)
         private readonly universityRepo: UniversityRepositoryPort,
         private readonly mapper: UniversityMapper
     ) { }
 
-    async execute(props: Props): Promise<any> {
+    async execute(props: Props): Promise<unknown> {
         const universities = await this.universityRepo.findAllPaginated(props)
 
         return {
