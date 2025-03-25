@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl } from "class-validator";
 
 export class CreateUniversityDto {
     @IsNotEmpty()
@@ -16,4 +16,9 @@ export class CreateUniversityDto {
     @IsNotEmpty()
     @IsNumber()
     rating: number;
+
+    @IsOptional()
+    @IsUrl()
+    @IsString()
+    websiteUrl?: string;
 }

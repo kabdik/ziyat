@@ -13,6 +13,7 @@ export class UniversityMapper implements Mapper<UniversityEntity, University> {
             country: props.country,
             description: props.description,
             rating: props.rating,
+            websiteUrl: props.websiteUrl || null,
             createdAt: props.createdAt,
             modifiedAt: props.updatedAt,
         };
@@ -25,19 +26,21 @@ export class UniversityMapper implements Mapper<UniversityEntity, University> {
                 name: record.name,
                 country: record.country,
                 description: record.description,
-                rating: record.rating
+                rating: record.rating,
+                websiteUrl: record.websiteUrl || undefined
             }
         })
     }
 
-    toUi(entity: UniversityEntity, params?: unknown) {
+    toUi(entity: UniversityEntity) {
         const props = entity.getProps()
         return {
             id: props.id,
             name: props.name,
             description: props.description,
             rating: props.rating,
-            country: props.country
+            country: props.country,
+            websiteUrl: props.websiteUrl
         }
     }
 

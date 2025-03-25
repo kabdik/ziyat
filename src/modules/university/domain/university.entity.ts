@@ -5,6 +5,7 @@ interface Props {
     description: string;
     country: string;
     rating: number;
+    websiteUrl?: string;
 }
 export class UniversityEntity extends Entity<Props> {
     static create(props: Props) {
