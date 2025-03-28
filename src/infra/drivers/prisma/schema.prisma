@@ -7,31 +7,444 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
-  name     String?
-  password String?
+enum RegistrationStatus {
+  not_started
+  awaiting_info
+  in_progress
+  confirmed
+  rejected
 }
 
-model UserRole {
-  id     Int @id @default(autoincrement())
-  userId Int
-  roleId Int
+enum Locale {
+  en
+  ru
+  kk
+}
+
+enum DegreeLevel {
+  undergraduate
+  graduate
+}
+
+enum UserAccountStatus {
+  active
+  suspended
+  deleted
+}
+
+model Region {
+  id           Int      @id @default(autoincrement()) 
+  translations Json
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  deletedAt    DateTime?
+
+  countries            Country[]
+  userPreferredRegions UserPreferredRegion[]
+  UserProfile          UserProfile[]
+
+  @@map("regions")
+  @@index([createdAt, deletedAt])
+}
+
+model Major {
+  id           Int      @id @default(autoincrement()) 
+  translations Json
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  deletedAt    DateTime?
+
+  programs            Program[]
+  userPreferredMajors UserPreferredMajor[]
+  UserProfile         UserProfile[]
+
+  @@map("majors")
+  @@index([createdAt, deletedAt])
+}
+
+model Users {
+  id                  Int                 @id @default(autoincrement())
+  username            String              @unique
+  email               String              @unique
+  passwordHash        String              
+  salt                String              
+  registrationStatus  RegistrationStatus  @default(not_started)
+  preferredLocale     Locale              @default(en)
+  accountStatus       UserAccountStatus   @default(active)
+  lastLogin           DateTime?
+  deletedAt           DateTime?
+  createdAt           DateTime            @default(now()) @map("created_at")
+  updatedAt           DateTime            @updatedAt @map("updated_at")
+
+  reviews                Review[]
+  userProfile            UserProfile?
+  userPreferredCountries UserPreferredCountry[]
+  userPreferredRegions   UserPreferredRegion[]
+  userPreferredMajors    UserPreferredMajor[]
+  organizationStaff      OrganizationStaff[]
+  consultationBookings   ConsultationBooking[]
+  organizationReviews    OrganizationReview[]
+  userRoles              UserRole[]
+
+  @@map("users")
+  @@index([email, deletedAt])
+  @@index([createdAt])
 }
 
 model Role {
-  id   Int    @id @default(autoincrement())
-  name String
+  id          Int      @id @default(autoincrement()) 
+  name        String   @unique
+  description String
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  deletedAt   DateTime?
+
+  userRoles   UserRole[]
+
+  @@map("roles")
+  @@index([name, deletedAt])
+}
+
+model Country {
+  id           Int      @id @default(autoincrement()) 
+  regionId     Int      @map("region_id")
+  translations Json
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  deletedAt    DateTime?
+
+  region   Region   @relation(fields: [regionId], references: [id])
+  cities   City[]
+  userPreferredCountries UserPreferredCountry[]
+  UserProfile UserProfile[]
+
+  @@map("countries")
+  @@index([regionId, deletedAt])
+  @@index([createdAt, deletedAt])
+}
+
+model City {
+  id           Int      @id @default(autoincrement()) 
+  countryId    Int      @map("country_id")
+  translations Json
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  deletedAt    DateTime?
+
+  country       Country      @relation(fields: [countryId], references: [id])
+  universities  University[]
+  organizations Organization[]
+  UserProfile   UserProfile[]
+
+  @@map("cities")
+  @@index([countryId, deletedAt])
+  @@index([createdAt, deletedAt])
 }
 
 model University {
-  id          Int      @id @default(autoincrement())
-  name        String
-  country     String
-  description String
-  rating      Int
-  websiteUrl  String?
-  createdAt   DateTime @default(now())
-  modifiedAt  DateTime @updatedAt
+  id                         Int      @id @default(autoincrement()) 
+  name                       String
+  cityId                     Int      @map("city_id")
+  website                    String
+  type                       String
+  rankingInfo                String   @map("ranking_info")
+  shortDescription           String   @map("short_description")
+  earlyApplicationDeadline   DateTime? @map("early_application_deadline")
+  regularApplicationDeadline DateTime? @map("regular_application_deadline")
+  lateApplicationDeadline    DateTime? @map("late_application_deadline")
+  averageAcceptanceRate      Float    @map("average_acceptance_rate")
+  requiredEssayCount         Int      @map("required_essay_count")
+  createdAt                  DateTime @default(now()) @map("created_at")
+  updatedAt                  DateTime @updatedAt @map("updated_at")
+  deletedAt                  DateTime?
+
+  city                     City       @relation(fields: [cityId], references: [id])
+  programs                 Program[]
+  reviews                  Review[]
+  scholarshipUniversities  ScholarshipUniversity[]
+  organizationUniversities OrganizationUniversity[]
+  UserProfile              UserProfile[]
+
+  @@map("universities")
+  @@index([cityId, deletedAt])
+  @@index([createdAt, deletedAt])
+}
+
+model Program {
+  id                    Int         @id @default(autoincrement()) 
+  universityId          Int         @map("university_id")
+  majorId               Int         @map("major_id")
+  degreeLevel           DegreeLevel @map("degree_level")
+  languageOfInstruction String      @map("language_of_instruction")
+  duration              String
+  tuitionFee            String      @map("tuition_fee")
+  createdAt             DateTime    @default(now()) @map("created_at")
+  updatedAt             DateTime    @updatedAt @map("updated_at")
+  deletedAt             DateTime?
+
+  university            University @relation(fields: [universityId], references: [id])
+  major                 Major      @relation(fields: [majorId], references: [id])
+  admissionRequirements AdmissionRequirement[]
+
+  @@map("programs")
+  @@index([universityId, deletedAt])
+  @@index([majorId, deletedAt])
+}
+
+model AdmissionRequirement {
+  id                     Int      @id @default(autoincrement()) 
+  programId              Int      @map("program_id")
+  requiredGpa            Float    @map("required_gpa")
+  requiredTests          Json     @map("required_tests")
+  minTestScores          Json     @map("min_test_scores")
+  applicationDeadline    DateTime @map("application_deadline")
+  acceptanceRate         Float    @map("acceptance_rate")
+  additionalRequirements String   @map("additional_requirements")
+  createdAt              DateTime @default(now()) @map("created_at")
+  updatedAt              DateTime @updatedAt @map("updated_at")
+  deletedAt              DateTime?
+
+  program                Program  @relation(fields: [programId], references: [id])
+
+  @@map("admission_requirements")
+  @@index([programId, deletedAt])
+  @@index([createdAt, deletedAt])
+}
+
+model Scholarship {
+  id                  Int      @id @default(autoincrement()) 
+  name                String
+  description         String
+  eligibilityCriteria String   @map("eligibility_criteria")
+  coverage            String
+  applicationDeadline DateTime @map("application_deadline")
+  officialLink        String   @map("official_link")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+  deletedAt           DateTime?
+
+  scholarshipUniversities ScholarshipUniversity[]
+
+  @@map("scholarships")
+  @@index([applicationDeadline, deletedAt])
+  @@index([createdAt, deletedAt])
+}
+
+model ScholarshipUniversity {
+  id            Int      @id @default(autoincrement()) 
+  scholarshipId Int      @map("scholarship_id")
+  universityId  Int      @map("university_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  deletedAt     DateTime?
+
+  scholarship   Scholarship @relation(fields: [scholarshipId], references: [id])
+  university    University  @relation(fields: [universityId], references: [id])
+
+  @@map("scholarship_universities")
+  @@index([scholarshipId, deletedAt])
+  @@index([universityId, deletedAt])
+}
+
+model Review {
+  id           Int      @id @default(autoincrement()) 
+  userId       Int      @map("user_id")
+  universityId Int      @map("university_id")
+  rating       Int
+  textReview   String   @map("text_review")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  deletedAt    DateTime?
+
+  user         Users     @relation(fields: [userId], references: [id])
+  university   University @relation(fields: [universityId], references: [id])
+
+  @@map("reviews")
+  @@index([userId, deletedAt])
+  @@index([universityId, deletedAt])
+}
+
+model UserProfile {
+  id                     Int      @id @default(autoincrement()) 
+  name                   String
+  surname                String
+  userId                 Int      @map("user_id") @unique
+  currentEducationalStatus String @map("current_educational_status")
+  gpa                    Float
+  testScores             Json     @map("test_scores")
+  preferredLocaleToStudy String   @map("preferred_locale_to_study")
+  preferredDegreeLevel   DegreeLevel @map("preferred_degree_level")
+  preferredMajorId       Int      @map("preferred_major_id")
+  preferredUniversityId  Int      @map("preferred_university_id")
+  preferredCountryId     Int      @map("preferred_country_id")
+  preferredRegionId      Int      @map("preferred_region_id")
+  preferredCityId        Int      @map("preferred_city_id")
+  preferredLocaleInSystem Locale  @map("preferred_locale_in_system")
+  createdAt              DateTime @default(now()) @map("created_at")
+  updatedAt              DateTime @updatedAt @map("updated_at")
+  deletedAt              DateTime?
+
+  user                   Users    @relation(fields: [userId], references: [id])
+  major                  Major    @relation(fields: [preferredMajorId], references: [id])
+  university             University @relation(fields: [preferredUniversityId], references: [id])
+  country                Country    @relation(fields: [preferredCountryId], references: [id])
+  region                 Region     @relation(fields: [preferredRegionId], references: [id])
+  city                   City       @relation(fields: [preferredCityId], references: [id])
+  
+  @@map("user_profiles")
+  @@index([userId, deletedAt])
+  @@index([createdAt, deletedAt])
+}
+
+model UserPreferredCountry {
+  userId    Int      @map("user_id")
+  countryId Int      @map("country_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  deletedAt DateTime?
+
+  user    Users   @relation(fields: [userId], references: [id])
+  country Country @relation(fields: [countryId], references: [id])
+
+  @@id([userId, countryId])
+  @@map("user_preferred_countries")
+  @@index([createdAt, deletedAt])
+}
+
+model UserPreferredRegion {
+  userId   Int      @map("user_id")
+  regionId Int      @map("region_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  deletedAt DateTime?
+
+  user   Users   @relation(fields: [userId], references: [id])
+  region Region  @relation(fields: [regionId], references: [id])
+
+  @@id([userId, regionId])
+  @@map("user_preferred_regions")
+  @@index([createdAt, deletedAt])
+}
+
+model UserPreferredMajor {
+  userId   Int      @map("user_id")
+  majorId  Int      @map("major_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  deletedAt DateTime?
+
+  user   Users   @relation(fields: [userId], references: [id])
+  major  Major   @relation(fields: [majorId], references: [id])
+
+  @@id([userId, majorId])
+  @@map("user_preferred_majors")
+  @@index([createdAt, deletedAt])
+}
+
+model Organization {
+  id           Int      @id @default(autoincrement()) 
+  cityId       Int      @map("city_id")
+  address      String
+  telephone    String
+  translations Json
+  website      String
+  contactEmail String   @map("contact_email")
+  workExperience String  @map("work_experience")
+  description  String
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  deletedAt    DateTime?
+
+  city                     City                   @relation(fields: [cityId], references: [id])
+  organizationStaff        OrganizationStaff[]
+  consultationBookings     ConsultationBooking[]
+  organizationReviews      OrganizationReview[]
+  organizationUniversities OrganizationUniversity[]
+
+  @@map("organizations")
+  @@index([cityId, deletedAt])
+  @@index([createdAt, deletedAt])
+}
+
+model OrganizationStaff {
+  id             Int      @id @default(autoincrement()) 
+  organizationId Int      @map("organization_id")
+  userId         Int      @map("user_id")
+  role           String
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  deletedAt      DateTime?
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+  user         Users        @relation(fields: [userId], references: [id])
+
+  @@map("organization_staff")
+  @@index([organizationId, deletedAt])
+  @@index([userId, deletedAt])
+}
+
+model ConsultationBooking {
+  id                   Int      @id @default(autoincrement()) 
+  userId               Int      @map("user_id")
+  organizationId       Int      @map("organization_id")
+  appointmentDatetime  DateTime @map("appointment_datetime")
+  status               String
+  comment              String
+  createdAt            DateTime @default(now()) @map("created_at")
+  updatedAt            DateTime @updatedAt @map("updated_at")
+  deletedAt            DateTime?
+
+  user         Users        @relation(fields: [userId], references: [id])
+  organization Organization @relation(fields: [organizationId], references: [id])
+
+  @@map("consultation_bookings")
+  @@index([userId, deletedAt])
+  @@index([organizationId, deletedAt])
+}
+
+model OrganizationReview {
+  id             Int      @id @default(autoincrement()) 
+  userId         Int      @map("user_id")
+  organizationId Int      @map("organization_id")
+  rating         Int
+  textReview     String   @map("text_review")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  deletedAt      DateTime?
+
+  user         Users        @relation(fields: [userId], references: [id])
+  organization Organization @relation(fields: [organizationId], references: [id])
+
+  @@map("organization_reviews")
+  @@index([userId, deletedAt])
+  @@index([organizationId, deletedAt])
+}
+
+model OrganizationUniversity {
+  id             Int      @id @default(autoincrement()) 
+  organizationId Int      @map("organization_id")
+  universityId   Int      @map("university_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  deletedAt      DateTime?
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+  university   University   @relation(fields: [universityId], references: [id])
+
+  @@map("organization_universities")
+  @@index([organizationId, deletedAt])
+  @@index([universityId, deletedAt])
+}
+
+model UserRole {
+  id       Int      @id @default(autoincrement()) 
+  userId   Int      @map("user_id")
+  roleId   Int      @map("role_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  deletedAt DateTime?
+
+  user Users @relation(fields: [userId], references: [id])
+  role Role  @relation(fields: [roleId], references: [id])
+
+  @@map("user_roles")
+  @@index([userId, deletedAt])
+  @@index([roleId, deletedAt])
 }
